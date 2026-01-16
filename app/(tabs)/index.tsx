@@ -1,98 +1,164 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useMemo } from 'react';
+import { View, Text, FlatList, TouchableOpacity, ActivityIndicator, RefreshControl, Alert, SectionList } from 'react-native';
+import { useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { inventoryAPI, transactionAPI } from '../../utils/api';
+import { useAuth } from '../../contexts/AuthContext';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+interface InventoryItem {
+  _id: string;
+  name: string;
+  category: string;
+  totalQuantity: number;
+  availableQuantity: number;
+}
 
-export default function HomeScreen() {
+interface SectionData {
+  title: string;
+  data: InventoryItem[];
+}
+
+export default function InventoryScreen() {
+  const [items, setItems] = useState<InventoryItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const { user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    loadInventory();
+  }, []);
+
+  const loadInventory = async () => {
+    try {
+      const response = await inventoryAPI.getAllItems();
+      if (response.success) {
+        setItems(response.items);
+      }
+    } catch (error: any) {
+      Alert.alert('Error', error.message || 'Failed to load inventory');
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
+
+  // Group items by category
+  const categorizedItems = useMemo(() => {
+    const grouped = items.reduce((acc, item) => {
+      const category = item.category || 'Other';
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(item);
+      return acc;
+    }, {} as Record<string, InventoryItem[]>);
+
+    return Object.keys(grouped)
+      .sort()
+      .map((category) => ({
+        title: category,
+        data: grouped[category].sort((a, b) => a.name.localeCompare(b.name)),
+      }));
+  }, [items]);
+
+  const handleRequestItem = async (itemId: string) => {
+    if (user?.role === 'admin') {
+      Alert.alert('Info', 'Admins cannot request items');
+      return;
+    }
+
+    Alert.alert(
+      'Request Item',
+      'Are you sure you want to request this item?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Request',
+          onPress: async () => {
+            try {
+              const response = await transactionAPI.requestItem(itemId);
+              if (response.success) {
+                Alert.alert('Success', 'Item requested successfully!');
+                loadInventory();
+              }
+            } catch (error: any) {
+              Alert.alert('Error', error.message || 'Failed to request item');
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  const renderItem = ({ item }: { item: InventoryItem }) => {
+    const isAvailable = item.availableQuantity > 0;
+    
+    return (
+      <View className="bg-white rounded-lg p-4 mb-3 shadow-sm border border-gray-200">
+        <View className="flex-row justify-between items-start mb-2">
+          <View className="flex-1">
+            <Text className="text-lg font-semibold text-gray-900">{item.name}</Text>
+            <Text className="text-sm text-gray-500 mt-1">{item.category}</Text>
+          </View>
+          <View className={`px-3 py-1 rounded-full ${isAvailable ? 'bg-green-100' : 'bg-red-100'}`}>
+            <Text className={`text-xs font-medium ${isAvailable ? 'text-green-700' : 'text-red-700'}`}>
+              {isAvailable ? 'Available' : 'Out of Stock'}
+            </Text>
+          </View>
+        </View>
+        
+        <View className="flex-row justify-between items-center mt-3">
+          <Text className="text-sm text-gray-600">
+            {item.availableQuantity} of {item.totalQuantity} available
+          </Text>
+          {user?.role === 'student' && isAvailable && (
+            <TouchableOpacity
+              className="bg-blue-600 px-4 py-2 rounded-lg"
+              onPress={() => handleRequestItem(item._id)}
+            >
+              <Text className="text-white font-medium">Request</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      </View>
+    );
+  };
+
+  const renderSectionHeader = ({ section }: { section: SectionData }) => (
+    <View className="bg-gray-100 px-4 py-2 mt-4 mb-2">
+      <Text className="text-lg font-bold text-gray-800">{section.title}</Text>
+    </View>
+  );
+
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center bg-gray-50">
+        <ActivityIndicator size="large" color="#2563eb" />
+      </View>
+    );
+  }
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
-
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <View className="flex-1 bg-gray-50">
+      <SectionList
+        sections={categorizedItems}
+        renderItem={renderItem}
+        renderSectionHeader={renderSectionHeader}
+        keyExtractor={(item) => item._id}
+        contentContainerStyle={{ padding: 16 }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={loadInventory} />
+        }
+        ListEmptyComponent={
+          <View className="items-center py-12">
+            <Ionicons name="cube-outline" size={64} color="#9ca3af" />
+            <Text className="text-gray-500 mt-4">No items available</Text>
+          </View>
+        }
+        stickySectionHeadersEnabled={false}
+      />
+    </View>
   );
 }
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
