@@ -52,7 +52,7 @@ exports.register = async (req, res) => {
 // Login
 exports.login = async (req, res) => {
   try {
-  const { email, password, pushToken } = req.body;
+  const { email, passwor } = req.body;
 
   // Find user by email
   const user = await User.findOne({ email });
@@ -94,6 +94,25 @@ exports.login = async (req, res) => {
       user: userResponse,
       token 
     });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+// Update Push Notification Token
+exports.updatePushToken = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { pushToken } = req.body;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    user.pushToken = pushToken;
+    await user.save();
+
+    res.json({ success: true, message: 'Push token updated successfully' });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }

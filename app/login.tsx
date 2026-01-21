@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuth } from '../contexts/AuthContext';
+import { authAPI } from '../utils/api';
+import { registerForPushNotificationsAsync } from '../utils/notifications';
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -9,6 +11,7 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const router = useRouter();
+  
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -19,6 +22,11 @@ export default function LoginScreen() {
     setLoading(true);
     try {
       await login(email, password);
+      const token = await registerForPushNotificationsAsync();
+      if (token) {
+        await authAPI.updatePushToken(token);
+        console.log("Push Token Updated:", token);
+      }
       router.replace('/(tabs)');
     } catch (error: any) {
       Alert.alert('Login Failed', error.message || 'Invalid credentials');

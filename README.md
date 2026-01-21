@@ -1,4 +1,4 @@
-# CampusLog 📱
+# CampusLog 
 
 **CampusLog** is a Full-Stack Mobile Application designed to digitally transform the inefficient manual borrowing process in educational institutions. It replaces physical logbooks with a secure mobile application, allowing students to request items remotely and administrators to manage approvals efficiently.
 

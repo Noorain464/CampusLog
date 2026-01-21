@@ -77,6 +77,12 @@ export const authAPI = {
       body: JSON.stringify({ email, password }),
     });
   },
+  updatePushToken: async (token) => {
+    return apiRequest('/auth/token', { // Ensure this route exists in your backend
+      method: 'PUT',
+      body: JSON.stringify({ pushToken: token }),
+    });
+  },
 
   getProfile: async () => {
     return apiRequest('/auth/profile', {
