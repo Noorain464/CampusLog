@@ -4,30 +4,30 @@
 
 ## 🚀 Problem Statement
 Many educational institutions still rely on manual logbooks for borrowing sports, lab, or library equipment. This leads to:
-* [cite_start]**Manual Inefficiency:** Writing details in physical books is slow and error-prone[cite: 7].
-* [cite_start]**Missed Requests:** Students struggle to find staff members for permission[cite: 8].
-* [cite_start]**Lack of History:** No digital trail of who borrowed what and when[cite: 9].
+* Writing details in physical books is slow and error-prone.
+* Students struggle to find staff members for permission.
+* No digital trail of who borrowed what and when.
 
 ## 🛠️ Tech Stack
-[cite_start]This project uses a Full-Stack architecture as required by the final project guidelines[cite: 40].
+This project uses a Full-Stack architecture as required by the final project guidelines.
 
-* [cite_start]**Frontend:** React Native (Expo) [cite: 33]
-* [cite_start]**Backend:** Node.js & Express [cite: 36]
-* [cite_start]**Database:** MongoDB (Mongoose) [cite: 39]
+* **Frontend:** React Native (Expo) 
+* **Backend:** Node.js & Express 
+* **Database:** MongoDB (Mongoose) 
 * **Authentication:** JWT (JSON Web Tokens)
 * **Styling:** NativeWind (Tailwind CSS)
 
 ## ✨ Features Implemented
 
 ### 🎓 Student Module
-* [cite_start]**Inventory Catalog:** View real-time availability of items (e.g., Cricket Bat, Lab Equipment)[cite: 12].
-* [cite_start]**Remote Request:** Request items directly from the app without finding staff physically[cite: 12].
-* [cite_start]**Status Tracking:** View the status of requests (Pending, Approved, Rejected)[cite: 13].
+* **Inventory Catalog:** View real-time availability of items (e.g., Cricket Bat, Lab Equipment).
+* **Remote Request:** Request items directly from the app without finding staff physically.
+* **Status Tracking:** View the status of requests (Pending, Approved, Rejected).
 
 ### 🛡️ Admin Module
-* [cite_start]**Approval Dashboard:** View a list of all pending student requests[cite: 18].
-* [cite_start]**Action Requests:** Approve or Reject requests with a single tap[cite: 18].
-* [cite_start]**Return Management:** Mark items as returned to update inventory automatically[cite: 30].
+* **Approval Dashboard:** View a list of all pending student requests.
+* **Action Requests:** Approve or Reject requests with a single tap.
+* **Return Management:** Mark items as returned to update inventory automatically.
 
 ## ⚙️ How to Run Locally
 
@@ -48,8 +48,8 @@ Many educational institutions still rely on manual logbooks for borrowing sports
 3.  Create a `.env` file in the `server` directory with the following credentials:
     ```env
     PORT=5000
-    MONGODB_URI=your_mongodb_connection_string_here
-    JWT_SECRET=your_secret_key_here
+    MONGODB_URI
+    JWT_SECRET
     ```
 4.  Start the server:
     ```bash
@@ -72,7 +72,6 @@ Many educational institutions still rely on manual logbooks for borrowing sports
     ```
 4.  Scan the QR code with your Expo Go app (Android/iOS).
 
-> **Note:** Ensure your phone and computer are on the same Wi-Fi network, or use an emulator.
 
 ## 📡 API Documentation (Basic)
 
@@ -89,9 +88,3 @@ Many educational institutions still rely on manual logbooks for borrowing sports
 | `POST` | `/api/transaction/approve` | Admin approves a request |
 | `POST` | `/api/transaction/reject` | Admin rejects a request |
 
-## 🔮 Future Scope
-* **Push Notifications:** Integration with FCM to alert admins of new requests instantly.
-* **Overdue Reminders:** Automated alerts for items not returned on time.
-
----
-*Submitted for the Final Year Project - Mobile Application Development*
