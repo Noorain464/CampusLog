@@ -1,50 +1,97 @@
-# Welcome to your Expo app 👋
+# CampusLog 📱
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**CampusLog** is a Full-Stack Mobile Application designed to digitally transform the inefficient manual borrowing process in educational institutions. It replaces physical logbooks with a secure mobile application, allowing students to request items remotely and administrators to manage approvals efficiently.
 
-## Get started
+## 🚀 Problem Statement
+Many educational institutions still rely on manual logbooks for borrowing sports, lab, or library equipment. This leads to:
+* [cite_start]**Manual Inefficiency:** Writing details in physical books is slow and error-prone[cite: 7].
+* [cite_start]**Missed Requests:** Students struggle to find staff members for permission[cite: 8].
+* [cite_start]**Lack of History:** No digital trail of who borrowed what and when[cite: 9].
 
-1. Install dependencies
+## 🛠️ Tech Stack
+[cite_start]This project uses a Full-Stack architecture as required by the final project guidelines[cite: 40].
 
-   ```bash
-   npm install
-   ```
+* [cite_start]**Frontend:** React Native (Expo) [cite: 33]
+* [cite_start]**Backend:** Node.js & Express [cite: 36]
+* [cite_start]**Database:** MongoDB (Mongoose) [cite: 39]
+* **Authentication:** JWT (JSON Web Tokens)
+* **Styling:** NativeWind (Tailwind CSS)
 
-2. Start the app
+## ✨ Features Implemented
 
-   ```bash
-   npx expo start
-   ```
+### 🎓 Student Module
+* [cite_start]**Inventory Catalog:** View real-time availability of items (e.g., Cricket Bat, Lab Equipment)[cite: 12].
+* [cite_start]**Remote Request:** Request items directly from the app without finding staff physically[cite: 12].
+* [cite_start]**Status Tracking:** View the status of requests (Pending, Approved, Rejected)[cite: 13].
 
-In the output, you'll find options to open the app in a
+### 🛡️ Admin Module
+* [cite_start]**Approval Dashboard:** View a list of all pending student requests[cite: 18].
+* [cite_start]**Action Requests:** Approve or Reject requests with a single tap[cite: 18].
+* [cite_start]**Return Management:** Mark items as returned to update inventory automatically[cite: 30].
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## ⚙️ How to Run Locally
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### Prerequisites
+* Node.js installed
+* MongoDB Atlas connection string (or local MongoDB)
+* Expo Go app on your phone (or Android Emulator)
 
-## Get a fresh project
+### 1. Backend Setup
+1.  Navigate to the server folder:
+    ```bash
+    cd server
+    ```
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
+3.  Create a `.env` file in the `server` directory with the following credentials:
+    ```env
+    PORT=5000
+    MONGODB_URI=your_mongodb_connection_string_here
+    JWT_SECRET=your_secret_key_here
+    ```
+4.  Start the server:
+    ```bash
+    npm start
+    ```
+    *The server should run on http://localhost:5000*
 
-When you're ready, run:
+### 2. Mobile App (Frontend) Setup
+1.  Navigate to the root project folder:
+    ```bash
+    cd ..
+    ```
+2.  Install dependencies:
+    ```bash
+    npm install
+    ```
+3.  Start the Expo server:
+    ```bash
+    npx expo start
+    ```
+4.  Scan the QR code with your Expo Go app (Android/iOS).
 
-```bash
-npm run reset-project
-```
+> **Note:** Ensure your phone and computer are on the same Wi-Fi network, or use an emulator.
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 📡 API Documentation (Basic)
 
-## Learn more
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| **Auth** | | |
+| `POST` | `/api/auth/register` | Register a new student/admin |
+| `POST` | `/api/auth/login` | Login and receive JWT |
+| **Inventory** | | |
+| `GET` | `/api/inventory` | Get all available items |
+| **Transactions** | | |
+| `POST` | `/api/transaction/request` | Student requests an item |
+| `GET` | `/api/transaction/pending` | Admin gets all pending requests |
+| `POST` | `/api/transaction/approve` | Admin approves a request |
+| `POST` | `/api/transaction/reject` | Admin rejects a request |
 
-To learn more about developing your project with Expo, look at the following resources:
+## 🔮 Future Scope
+* **Push Notifications:** Integration with FCM to alert admins of new requests instantly.
+* **Overdue Reminders:** Automated alerts for items not returned on time.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+---
+*Submitted for the Final Year Project - Mobile Application Development*
