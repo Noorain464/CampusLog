@@ -52,7 +52,7 @@ exports.register = async (req, res) => {
 // Login
 exports.login = async (req, res) => {
   try {
-  const { email, passwor } = req.body;
+  const { email, password,pushToken } = req.body;
 
   // Find user by email
   const user = await User.findOne({ email });

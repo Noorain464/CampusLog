@@ -47,6 +47,7 @@ export default function LoginScreen() {
           placeholder="Enter your email"
           value={email}
           onChangeText={setEmail}
+          autoCapitalize="none"
         />
       </View>
 
@@ -57,6 +58,7 @@ export default function LoginScreen() {
           placeholder="Enter your password"
           value={password}
           onChangeText={setPassword}
+          autoCapitalize="none"
         />
       </View>
 
