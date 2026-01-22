@@ -2,7 +2,7 @@ import { Stack } from "expo-router";
 import { AuthProvider } from "../contexts/AuthContext";
 import * as Notifications from 'expo-notifications';
 
-// Keep this configuration
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,

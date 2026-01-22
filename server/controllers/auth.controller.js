@@ -17,8 +17,7 @@ exports.register = async (req, res) => {
   }
 
   // Hash password
-  const saltRounds = 10;
-  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   const newUser = new User({ 
     name, 

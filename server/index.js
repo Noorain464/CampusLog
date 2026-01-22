@@ -26,13 +26,12 @@ connectDB();
 
 // CORS configuration
 const corsOptions = {
-  origin: process.env.CORS_ORIGIN || '*', // Allow specific origin in production
+  origin: process.env.CORS_ORIGIN || '*', 
   credentials: true,
   optionsSuccessStatus: 200
 };
 app.use(cors(corsOptions));
 
-// Body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
