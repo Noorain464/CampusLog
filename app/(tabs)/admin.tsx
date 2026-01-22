@@ -120,14 +120,6 @@ export default function AdminScreen() {
     );
   };
 
-  if (user?.role !== 'admin') {
-    return (
-      <View className="flex-1 justify-center items-center bg-gray-50">
-        <Ionicons name="shield-outline" size={64} color="#9ca3af" />
-        <Text className="text-gray-500 mt-4">Admin access required</Text>
-      </View>
-    );
-  }
 
   if (loading) {
     return (
