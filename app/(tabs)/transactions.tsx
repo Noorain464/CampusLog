@@ -12,7 +12,7 @@ interface Transaction {
     _id: string;
     name: string;
     category: string;
-  };
+  }|null;
 }
 
 const getStatusColor = (status: string) => {
@@ -96,13 +96,15 @@ export default function TransactionsScreen() {
     const statusColor = getStatusColor(item.status);
     const statusIcon = getStatusIcon(item.status);
     const canReturn = item.status === 'approved';
+    const itemName = item.item?.name || "Item Deleted";
+    const itemCategory = item.item?.category || "Unknown Category";
 
     return (
       <View className="bg-white rounded-lg p-4 mb-3 shadow-sm border border-gray-200">
         <View className="flex-row justify-between items-start mb-2">
           <View className="flex-1">
-            <Text className="text-lg font-semibold text-gray-900">{item.item.name}</Text>
-            <Text className="text-sm text-gray-500 mt-1">{item.item.category}</Text>
+            <Text className="text-lg font-semibold text-gray-900">{itemName}</Text>
+            <Text className="text-sm text-gray-500 mt-1">{itemCategory}</Text>
           </View>
           <View className={`px-3 py-1 rounded-full flex-row items-center gap-1 ${statusColor}`}>
             <Ionicons name={statusIcon as any} size={14} />
